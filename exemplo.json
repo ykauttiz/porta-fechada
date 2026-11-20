@@ -1,0 +1,54 @@
+{
+  "before": {
+    "everyone": "3072",
+    "roles": {
+      "visitante": "0"
+    },
+    "channels": {
+      "tickets": {
+        "overwrites": [
+          {
+            "type": "everyone",
+            "deny": "1024",
+            "allow": "0"
+          }
+        ]
+      }
+    }
+  },
+  "after": {
+    "everyone": "3072",
+    "roles": {
+      "visitante": "0"
+    },
+    "channels": {
+      "tickets": {
+        "overwrites": [
+          {
+            "type": "everyone",
+            "deny": "1024",
+            "allow": "0"
+          },
+          {
+            "type": "role",
+            "id": "visitante",
+            "allow": "1024",
+            "deny": "0"
+          }
+        ]
+      }
+    }
+  },
+  "rules": [
+    {
+      "name": "Tickets privados para visitantes",
+      "channel": "tickets",
+      "member": "exemplo",
+      "roles": [
+        "visitante"
+      ],
+      "permission": "view",
+      "expect": false
+    }
+  ]
+}
