@@ -67,7 +67,7 @@ function run() {
   try {
     const result = compare(JSON.parse(find("#source").value));
     const answer = value => value ? "Permitido" : "Negado";
-    show(result.map(r=>[r.rule,answer(r.before),answer(r.after),r.status]));
+    show(result.map(r=>[r.rule,answer(r.before),answer(r.after),r.status,r.afterReason]));
     find("#message").textContent = result.length + " regra(s) avaliada(s).";
   } catch (error) { show([]); find("#message").textContent = error.message; }
 }

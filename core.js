@@ -5,7 +5,9 @@ function mask(value) {
   if (typeof value !== "string" || !/^\d{1,20}$/.test(value)) throw Error("Permissões devem ser inteiros decimais em texto.");
   return BigInt(value);
 }
-function access(snapshot, rule) {
+function decision(snapshot, rule) {
+  if (!snapshot || typeof snapshot !== "object" || !rule || typeof rule !== "object")
+    throw Error("Informe a configuração e a regra como objetos.");
   if (!Array.isArray(rule.roles) || !rule.roles.every(k => typeof k === "string") ||
       typeof rule.member !== "string" || typeof rule.channel !== "string" ||
       !["view","send"].includes(rule.permission) || typeof rule.expect !== "boolean")
@@ -23,18 +25,28 @@ function access(snapshot, rule) {
     if (item.type === "role" && rule.roles.includes(item.id)) groups[1].push({allow,deny});
     if (item.type === "member" && item.id === rule.member) groups[2].push({allow,deny});
   }
-  for (const group of groups) {
+  const permitted = value => Boolean(value & VIEW) && (rule.permission === "view" || Boolean(value & SEND));
+  let reason = "Permissões do servidor";
+  const labels = ["Canal · todos", "Canal · cargos do membro", "Canal · membro"];
+  for (const [index, group] of groups.entries()) {
     let allow = 0n, deny = 0n;
     for (const item of group) { allow |= item.allow; deny |= item.deny; }
-    bits = (bits & ~deny) | allow;
+    const next = (bits & ~deny) | allow;
+    if (permitted(next) !== permitted(bits)) reason = labels[index];
+    bits = next;
   }
-  return elevated || (Boolean(bits & VIEW) && (rule.permission === "view" || Boolean(bits & SEND)));
+  if (elevated) return {allowed:true, reason:rule.member === snapshot.owner ? "Dono do servidor" : "Administrador"};
+  return {allowed:permitted(bits), reason};
+}
+function access(snapshot, rule) {
+  return decision(snapshot, rule).allowed;
 }
 function compare(data) {
-  if (!Array.isArray(data.rules) || !data.rules.length) throw Error("Inclua pelo menos uma regra.");
+  if (!Array.isArray(data?.rules) || !data.rules.length) throw Error("Inclua pelo menos uma regra.");
   return data.rules.map(rule => {
-    const before = access(data.before,rule), after = access(data.after,rule);
-    return {rule:rule.name || rule.channel,before,after,status:after === rule.expect ?
+    const previous = decision(data.before,rule), current = decision(data.after,rule);
+    const before = previous.allowed, after = current.allowed;
+    return {rule:rule.name || rule.channel,before,after,beforeReason:previous.reason,afterReason:current.reason,status:after === rule.expect ?
       (before === after ? "Passou" : "Corrigida") : (before === after ? "Falha existente" : "Regressão")};
   });
 }
