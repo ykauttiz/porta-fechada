@@ -58,6 +58,18 @@ with sync_playwright() as p, TemporaryDirectory() as tmp:
         with csv.value.path().open(encoding="utf-8-sig") as stream:
             evidence=list(csv_module.DictReader(stream, delimiter=";"))
         assert len(evidence)==2 and len(evidence[0]["SHA-256 da configuração"])==64
+        data = json.loads((root/"exemplo.json").read_text())
+        data["rules"] = [dict(data["rules"][0],name=f"Regra {i:04d}") for i in range(2000)]
+        page.locator("#import").set_input_files({"name":"lote.json","mimeType":"application/json","buffer":json.dumps(data).encode()})
+        expect(page.locator("#rule-page")).to_have_text("1 / 40")
+        expect(page.locator("tbody tr")).to_have_count(50)
+        page.locator("#rule-next").click()
+        expect(page.locator("tbody tr").first).to_contain_text("Regra 0050")
+        page.locator("#rule-search").fill("Regra 1999")
+        expect(page.locator("tbody tr")).to_have_count(1)
+        expect(page.locator("#rule-pages")).to_be_hidden()
+        page.get_by_role("button",name="Passou · 0").click()
+        expect(page.locator("tbody tr")).to_have_count(0)
         assert not errors, errors
         page.close()
     browser.close()

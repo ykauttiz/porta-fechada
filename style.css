@@ -27,3 +27,9 @@ th { font-size:.8rem; background:#1c3044 } td { vertical-align:top }
 .verdict[data-status="Passou"],.verdict[data-status="Corrigida"] { color:#abedce; background:#1b3b37 }
 .skip { position:absolute; transform:translateY(-150%); z-index:5; padding:.6rem;background:#0c1422 }.skip:focus { transform:none }
 @media(max-width:840px){ .console{grid-template-columns:1fr} .portal-art{opacity:.3;inset-inline-start:72%} .hero p{max-width:75%} }
+.rule-overview {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,8rem),1fr));gap:.55rem;margin:1rem 0 1.4rem}
+.rule-overview button {background:#192e42;color:#daf3ff;border:1px solid #55738a;border-top:4px solid #85cce9;text-align:left;padding:.65rem}
+.rule-overview button[data-status="Regressão"] {border-top-color:#f39d88}
+.rule-overview button[data-status="Corrigida"] {border-top-color:#95dbae}
+.rule-overview button[aria-pressed=true] {background:#c9e9f5;color:#102c42}
+#rule-pages {display:flex;gap:1rem;align-items:center;margin:.6rem 0}

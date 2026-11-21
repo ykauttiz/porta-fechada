@@ -2,6 +2,8 @@
 
 ## 2026-11-21
 
+O painel de resultados conta os quatro tipos de decisão dentro da busca atual. Selecione um contador para filtrar e selecione-o novamente para remover o filtro. A tabela apresenta 50 regras por página, e CSV e JSON incluem a análise completa.
+
 Busque regras por nome, canal, membro ou cargo e combine a busca com o filtro de resultado. Os downloads continuam representando a comparação completa. Uma importação inválida identifica qual configuração continua em uso.
 
 - Configuração e resultados em painéis próprios, com navegação direta e identificação visual dos resultados.

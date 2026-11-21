@@ -75,24 +75,53 @@ const example = {
 };
 const source = find("#source");
 let evaluated = null, rows = [], generation = 0;
+const pageSize = 50;
+const verdicts = ["Regressão","Falha existente","Corrigida","Passou"];
+const normalize = text => text.normalize("NFD").replace(/\p{M}/gu,"").toLocaleLowerCase("pt-BR");
+let page = 0, searchIndex = [];
+const counters = verdicts.map(status => {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.dataset.status = status;
+  button.onclick = () => {
+    const filter = find("#filter");
+    filter.value = filter.value === status ? "" : status;
+    page = 0; draw();
+  };
+  find("#rule-overview").append(button);
+  return button;
+});
 function draw() {
-  const selected = find("#filter").value;
-  const answer = value => value ? "Permitido" : "Negado";
-  const normalize = text => text.normalize("NFD").replace(/\p{M}/gu,"").toLocaleLowerCase("pt-BR");
-  const query = normalize(find("#rule-search").value.trim());
-  const shown = rows.filter((result, index) => {
-    if (selected && result.status !== selected) return false;
-    const rule = evaluated.rules[index];
-    return !query || [result.rule,rule.channel,rule.member,...rule.roles].some(value => normalize(value).includes(query));
+  const selected = find("#filter").value, query = normalize(find("#rule-search").value.trim());
+  const counts = new Map(), shown = [];
+  rows.forEach((row,index) => {
+    if (query && !searchIndex[index].some(value => value.includes(query))) return;
+    counts.set(row.status,(counts.get(row.status) || 0) + 1);
+    if (!selected || selected === row.status) shown.push(row);
   });
-  show(shown.map(r=>[r.rule,answer(r.before),answer(r.after),r.status,r.beforeReason,r.afterReason]));
-  find("#message").textContent = (shown.length ? "" : "Nenhuma regra corresponde aos filtros. ") + shown.length + " de " + rows.length + " regra(s) · " +
-    rows.filter(r=>r.status==="Regressão").length + " regressão(ões).";
+  for (const button of counters) {
+    const status = button.dataset.status;
+    button.textContent = status + " · " + (counts.get(status) || 0);
+    button.setAttribute("aria-pressed",String(selected === status));
+    button.disabled = !evaluated;
+  }
+  const pages = Math.max(1,Math.ceil(shown.length / pageSize));
+  page = Math.min(pages-1,Math.max(0,page));
+  find("#rule-pages").hidden = pages === 1;
+  find("#rule-back").disabled = page === 0;
+  find("#rule-next").disabled = page === pages-1;
+  find("#rule-page").textContent = (page+1) + " / " + pages;
+  const answer = value => value ? "Permitido" : "Negado";
+  show(shown.slice(page*pageSize,(page+1)*pageSize).map(r=>[r.rule,answer(r.before),answer(r.after),r.status,r.beforeReason,r.afterReason]));
+  find("#message").textContent = (shown.length ? "" : "Nenhuma regra corresponde aos filtros. ") + shown.length + " de " + rows.length + " regra(s).";
 }
+find("#rule-back").onclick = () => {page--;draw();};
+find("#rule-next").onclick = () => {page++;draw();};
 function apply(data, rewrite) {
   const result = compare(data);
   if (rewrite) source.value = JSON.stringify(data,null,2);
-  evaluated = data; rows = result;
+  evaluated = data; rows = result; page = 0;
+  searchIndex = data.rules.map((rule,index) => [result[index].rule,rule.channel,rule.member,...rule.roles].map(normalize));
   find("#csv").disabled = find("#download").disabled = find("#save").disabled = false;
   draw();
 }
@@ -102,12 +131,12 @@ function parse(text) {
 }
 function error(e) {find("#message").textContent=e.message;}
 source.oninput=()=>{
-  generation++;evaluated=null;rows=[];show([]);find("#csv").disabled=find("#download").disabled=find("#save").disabled=true;
+  generation++;evaluated=null;rows=[];searchIndex=[];page=0;draw();find("#csv").disabled=find("#download").disabled=find("#save").disabled=true;
   find("#message").textContent="Configuração editada. Execute as regras para atualizar o relatório.";
 };
 find("#editor").onsubmit=e=>{e.preventDefault();generation++;try{apply(parse(source.value),false);}catch(err){error(err);}};
-find("#rule-search").oninput=()=>{if(evaluated)draw();};
-find("#filter").onchange=()=>{if(evaluated)draw();};
+find("#rule-search").oninput=()=>{if(evaluated){page=0;draw();}};
+find("#filter").onchange=()=>{if(evaluated){page=0;draw();}};
 find("#import").onchange=async e=>{
   const file=e.target.files[0],id=++generation;if(!file)return;
   try{if(file.size>2*1024*1024)throw Error("Use um JSON de até 2 MiB.");
