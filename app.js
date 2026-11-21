@@ -78,9 +78,15 @@ let evaluated = null, rows = [], generation = 0;
 function draw() {
   const selected = find("#filter").value;
   const answer = value => value ? "Permitido" : "Negado";
-  const shown = rows.filter(r => !selected || r.status === selected);
+  const normalize = text => text.normalize("NFD").replace(/\p{M}/gu,"").toLocaleLowerCase("pt-BR");
+  const query = normalize(find("#rule-search").value.trim());
+  const shown = rows.filter((result, index) => {
+    if (selected && result.status !== selected) return false;
+    const rule = evaluated.rules[index];
+    return !query || [result.rule,rule.channel,rule.member,...rule.roles].some(value => normalize(value).includes(query));
+  });
   show(shown.map(r=>[r.rule,answer(r.before),answer(r.after),r.status,r.beforeReason,r.afterReason]));
-  find("#message").textContent = shown.length + " de " + rows.length + " regra(s) · " +
+  find("#message").textContent = (shown.length ? "" : "Nenhuma regra corresponde aos filtros. ") + shown.length + " de " + rows.length + " regra(s) · " +
     rows.filter(r=>r.status==="Regressão").length + " regressão(ões).";
 }
 function apply(data, rewrite) {
@@ -100,12 +106,13 @@ source.oninput=()=>{
   find("#message").textContent="Configuração editada. Execute as regras para atualizar o relatório.";
 };
 find("#editor").onsubmit=e=>{e.preventDefault();generation++;try{apply(parse(source.value),false);}catch(err){error(err);}};
+find("#rule-search").oninput=()=>{if(evaluated)draw();};
 find("#filter").onchange=()=>{if(evaluated)draw();};
 find("#import").onchange=async e=>{
   const file=e.target.files[0],id=++generation;if(!file)return;
   try{if(file.size>2*1024*1024)throw Error("Use um JSON de até 2 MiB.");
     const text=await file.text();if(id===generation)apply(parse(text),true);
-  }catch(err){if(id===generation)error(err);}finally{if(id===generation)e.target.value="";}
+  }catch(err){if(id===generation)error(new Error("Arquivo não importado. " + err.message + (evaluated ? " A tabela e os downloads continuam com a última configuração válida." : "")));}finally{if(id===generation)e.target.value="";}
 };
 find("#builder").onsubmit=e=>{
   e.preventDefault();generation++;
