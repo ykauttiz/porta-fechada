@@ -37,6 +37,12 @@ with sync_playwright() as p, TemporaryDirectory() as tmp:
         import json
         assert len(json.loads(downloaded.value.path().read_text())["rules"]) == 2
         assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
+        with page.expect_download() as csv:
+            page.locator("#csv").click()
+        import csv as csv_module
+        with csv.value.path().open(encoding="utf-8-sig") as stream:
+            evidence=list(csv_module.DictReader(stream, delimiter=";"))
+        assert len(evidence)==2 and len(evidence[0]["SHA-256 da configuração"])==64
         assert not errors, errors
         page.close()
     browser.close()

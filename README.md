@@ -27,3 +27,5 @@ Carregue o exemplo, importe um JSON ou abra o editor. No formulário de regras, 
 O formato reconhece `schemaVersion: 1` e os arquivos antigos sem versão. As máscaras são strings decimais. Sobrescritas repetidas, cargos desconhecidos e bits simultaneamente permitidos e negados são recusados mesmo em canais que não aparecem nas regras. O limite é de 2 MiB por arquivo e 2 mil regras. As regras cobrem visualização e envio em canais comuns de texto. A simulação usa dados fornecidos localmente, sem conexão com o servidor Discord.
 
 [Referência de permissões do Discord](https://docs.discord.com/developers/topics/permissions)
+
+O relatório CSV contém todas as regras avaliadas, os cargos, a expectativa, as decisões e as etapas decisivas. No terminal, use `node check.js exemplo.json --csv > evidencias.csv`. O relatório do navegador e o CSV do terminal incluem o SHA-256 do JSON compacto em UTF-8, útil para comparar a entrada usada nas duas análises. A ordem das propriedades faz parte do cálculo.

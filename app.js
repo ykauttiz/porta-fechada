@@ -76,7 +76,7 @@ function apply(data, rewrite) {
   const result = compare(data);
   if (rewrite) source.value = JSON.stringify(data,null,2);
   evaluated = data; rows = result;
-  find("#download").disabled = find("#save").disabled = false;
+  find("#csv").disabled = find("#download").disabled = find("#save").disabled = false;
   draw();
 }
 function parse(text) {
@@ -85,7 +85,7 @@ function parse(text) {
 }
 function error(e) {find("#message").textContent=e.message;}
 source.oninput=()=>{
-  generation++;evaluated=null;rows=[];show([]);find("#download").disabled=find("#save").disabled=true;
+  generation++;evaluated=null;rows=[];show([]);find("#csv").disabled=find("#download").disabled=find("#save").disabled=true;
   find("#message").textContent="Configuração editada. Execute as regras para atualizar o relatório.";
 };
 find("#editor").onsubmit=e=>{e.preventDefault();generation++;try{apply(parse(source.value),false);}catch(err){error(err);}};
@@ -105,10 +105,21 @@ find("#builder").onsubmit=e=>{
     apply(data,true);
   }catch(err){error(err);}
 };
-function download(filename,value){
-  const link=document.createElement("a");link.href=URL.createObjectURL(new Blob([JSON.stringify(value,null,2)],{type:"application/json"}));
+function download(filename,value,type="application/json"){
+  const link=document.createElement("a");link.href=URL.createObjectURL(new Blob([type === "application/json" ? JSON.stringify(value,null,2) : value],{type}));
   link.download=filename;link.click();setTimeout(()=>URL.revokeObjectURL(link.href),1000);
 }
 find("#save").onclick=()=>download("configuracao.json",evaluated);
-find("#download").onclick=()=>download("relatorio.json",{schemaVersion:1,scope:"canais de texto",rules:rows});
+async function exportEvidence(format) {
+  const config = evaluated, result = rows;
+  try {
+    const bytes = new TextEncoder().encode(JSON.stringify(config));
+    const hash = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",bytes)), b => b.toString(16).padStart(2,"0")).join("");
+    if (config !== evaluated) return;
+    if (format === "csv") download("evidencias.csv", Reports.csv(config,result,hash), "text/csv;charset=utf-8");
+    else download("relatorio.json",{schemaVersion:1,scope:"canais de texto",configSha256:hash,rules:result});
+  } catch (err) { error(err); }
+}
+find("#csv").onclick=()=>exportEvidence("csv");
+find("#download").onclick=()=>exportEvidence("json");
 apply({...example,schemaVersion:1},true);
