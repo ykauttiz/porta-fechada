@@ -55,16 +55,21 @@ function decision(snapshot, rule) {
   }
   const permitted = value => Boolean(value & VIEW) && (rule.permission === "view" || Boolean(value & SEND));
   let reason = "Permissões do servidor";
+  if (elevated) {
+    reason = rule.member === snapshot.owner ? "Dono do servidor" : "Administrador";
+    return {allowed:true,reason,steps:[{stage:reason,allowed:true}]};
+  }
+  const steps = [{stage:reason,allowed:permitted(bits)}];
   const labels = ["Canal · todos", "Canal · cargos do membro", "Canal · membro"];
   for (const [index, group] of groups.entries()) {
     let allow = 0n, deny = 0n;
     for (const item of group) { allow |= item.allow; deny |= item.deny; }
     const next = (bits & ~deny) | allow;
     if (permitted(next) !== permitted(bits)) reason = labels[index];
+    if (group.length) steps.push({stage:labels[index],allowed:permitted(next)});
     bits = next;
   }
-  if (elevated) return {allowed:true, reason:rule.member === snapshot.owner ? "Dono do servidor" : "Administrador"};
-  return {allowed:permitted(bits), reason};
+  return {allowed:permitted(bits), reason, steps};
 }
 function access(snapshot, rule) {
   validateSnapshot(snapshot,"Configuração");
@@ -79,7 +84,7 @@ function compare(data) {
   return data.rules.map(rule => {
     const previous = decision(data.before,rule), current = decision(data.after,rule);
     const before = previous.allowed, after = current.allowed;
-    return {rule:rule.name || rule.channel,before,after,beforeReason:previous.reason,afterReason:current.reason,status:after === rule.expect ?
+    return {rule:rule.name || rule.channel,before,after,beforeReason:previous.reason,afterReason:current.reason,beforeSteps:previous.steps,afterSteps:current.steps,status:after === rule.expect ?
       (before === after ? "Passou" : "Corrigida") : (before === after ? "Falha existente" : "Regressão")};
   });
 }

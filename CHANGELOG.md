@@ -2,6 +2,8 @@
 
 ## 2026-11-21
 
+Na tabela de resultados, expanda cada etapa decisiva para acompanhar a permissão desde a configuração do servidor até a última sobrescrita aplicável. O relatório JSON inclui esse percurso.
+
 Histórico de comparações nomeadas no navegador, com reabertura, validação e remoção pela interface. O download da configuração permite manter uma cópia fora do navegador.
 
 A matriz por membro mostra leitura e envio antes e depois, separados por canal e conjunto de cargos declarado. Uma operação sem regra aparece explicitamente como tal.

@@ -26,6 +26,11 @@ with sync_playwright() as p, TemporaryDirectory() as tmp:
         assert page.evaluate("location.hash === document.querySelector('.skip').hash")
         assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
         expect(page.locator("#rule-table tbody")).to_contain_text("Regressão")
+        detail = page.locator("#rule-table tbody details").last
+        detail.locator("summary").click()
+        expect(detail.locator("li")).to_have_count(3)
+        expect(detail.locator("li").last).to_have_text("Canal · cargos do membro · Permitido")
+        detail.locator("summary").click()
         if os.environ.get("CAPTURAR_DEMO") == "1":
             captures = root / "capturas"
             captures.mkdir(exist_ok=True)

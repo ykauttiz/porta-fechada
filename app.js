@@ -13,6 +13,18 @@ function show(rows) {
         badge.dataset.status = value;
         badge.textContent = value;
         cell.append(badge);
+      } else if (index === 4 || index === 5) {
+        const details = document.createElement("details");
+        const summary = document.createElement("summary");
+        summary.textContent = value.reason;
+        const list = document.createElement("ol");
+        for (const step of value.steps) {
+          const item = document.createElement("li");
+          item.textContent = step.stage + " · " + (step.allowed ? "Permitido" : "Negado");
+          list.append(item);
+        }
+        details.append(summary,list);
+        cell.append(details);
       } else {
         cell.textContent = value;
       }
@@ -112,7 +124,7 @@ function draw() {
   find("#rule-next").disabled = page === pages-1;
   find("#rule-page").textContent = (page+1) + " / " + pages;
   const answer = value => value ? "Permitido" : "Negado";
-  show(shown.slice(page*pageSize,(page+1)*pageSize).map(r=>[r.rule,answer(r.before),answer(r.after),r.status,r.beforeReason,r.afterReason]));
+  show(shown.slice(page*pageSize,(page+1)*pageSize).map(r=>[r.rule,answer(r.before),answer(r.after),r.status,{reason:r.beforeReason,steps:r.beforeSteps},{reason:r.afterReason,steps:r.afterSteps}]));
   find("#message").textContent = (shown.length ? "" : "Nenhuma regra corresponde aos filtros. ") + shown.length + " de " + rows.length + " regra(s).";
 }
 find("#rule-back").onclick = () => {page--;draw();};
