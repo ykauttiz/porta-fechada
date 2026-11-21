@@ -1,7 +1,7 @@
 "use strict";
 const find = selector => document.querySelector(selector);
 function show(rows) {
-  const body = find("tbody");
+  const body = find("#rule-table tbody");
   body.replaceChildren();
   for (const values of rows) {
     const row = body.insertRow();
