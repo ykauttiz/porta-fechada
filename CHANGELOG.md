@@ -2,6 +2,8 @@
 
 ## 2026-11-21
 
+Histórico de comparações nomeadas no navegador, com reabertura, validação e remoção pela interface. O download da configuração permite manter uma cópia fora do navegador.
+
 A matriz por membro mostra leitura e envio antes e depois, separados por canal e conjunto de cargos declarado. Uma operação sem regra aparece explicitamente como tal.
 
 O CI executa os testes do motor e da CLI com cobertura no Node 22 e 24. Abra a etapa de testes para consultar as linhas e ramos cobertos. O CI disponibiliza capturas em duas larguras.

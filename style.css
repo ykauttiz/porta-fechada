@@ -33,3 +33,8 @@ th { font-size:.8rem; background:#1c3044 } td { vertical-align:top }
 .rule-overview button[data-status="Corrigida"] {border-top-color:#95dbae}
 .rule-overview button[aria-pressed=true] {background:#c9e9f5;color:#102c42}
 #rule-pages {display:flex;gap:1rem;align-items:center;margin:.6rem 0}
+
+@media (prefers-reduced-motion:no-preference){
+  .verdict {animation: reveal-state 220ms ease-out both}
+  @keyframes reveal-state {from{opacity:.7;transform:translateY(3px)}to{opacity:1;transform:none}}
+}

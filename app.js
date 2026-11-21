@@ -139,6 +139,44 @@ function drawMatrix() {
 }
 find("#matrix-panel").ontoggle = drawMatrix;
 find("#matrix-member").onchange = drawMatrix;
+const historyKey = "porta-fechada.comparacoes.v1";
+function readHistory() {
+  const entries = JSON.parse(localStorage.getItem(historyKey) || "[]");
+  if (!Array.isArray(entries) || entries.some(e => typeof e?.name !== "string" || !e.config)) throw Error("Histórico inválido.");
+  return entries;
+}
+function listHistory(entries) {
+  find("#history-list").replaceChildren(...entries.map(e => new Option(e.name,e.name)));
+  find("#history-remove").disabled = find("#history-open").disabled = entries.length === 0;
+}
+try {listHistory(readHistory());} catch {listHistory([]);}
+find("#history-save").onclick = () => {
+  try {
+    if (!evaluated) throw Error("Execute as regras antes de guardar.");
+    const name = find("#history-name").value.trim(), entries = readHistory();
+    if (!name || entries.some(e => e.name === name)) throw Error("Use um nome novo para a comparação.");
+    entries.push({name,config:evaluated});
+    localStorage.setItem(historyKey,JSON.stringify(entries));listHistory(entries);
+    find("#history-list").value=name;
+    find("#message").textContent="Comparação guardada neste navegador.";
+  } catch(e) {error(e);}
+};
+find("#history-open").onclick = () => {
+  try {
+    const entry = readHistory().find(e => e.name === find("#history-list").value);
+    if (!entry) throw Error("Comparação indisponível.");
+    if (!evaluated && !confirm("Descartar a edição pendente e abrir a comparação?")) return;
+    generation++;apply(entry.config,true);
+  } catch(e) {error(e);}
+};
+find("#history-remove").onclick = () => {
+  try {
+    const name = find("#history-list").value;
+    if (!confirm("Remover a cópia local de " + name + "?")) return;
+    const entries = readHistory().filter(e => e.name !== name);
+    localStorage.setItem(historyKey,JSON.stringify(entries));listHistory(entries);
+  } catch(e) {error(e);}
+};
 function apply(data, rewrite) {
   const result = compare(data);
   if (rewrite) source.value = JSON.stringify(data,null,2);

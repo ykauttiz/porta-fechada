@@ -31,6 +31,11 @@ with sync_playwright() as p, TemporaryDirectory() as tmp:
             captures.mkdir(exist_ok=True)
             page.screenshot(path=captures / f"demo-{width}.png", animations="disabled")
 
+        page.get_by_text("Histórico local de comparações",exact=True).click()
+        page.locator("#history-name").fill("Teste de revisão")
+        page.locator("#history-save").click()
+        expect(page.locator("#history-list option")).to_have_count(1)
+        page.locator("#history-open").click()
         page.get_by_text("Matriz por membro e canal",exact=True).click()
         expect(page.locator("#matrix-rows")).to_contain_text("Negado → Permitido")
         expect(page.locator("#matrix-rows")).to_contain_text("Sem regra")
