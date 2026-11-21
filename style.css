@@ -1,1 +1,29 @@
 :root{color-scheme:dark;background:#191827;color:#fffaf4;font:16px/1.55 system-ui,sans-serif;--accent:#c7b4ff;--panel:#292637;--muted:#d0c8e1}*{box-sizing:border-box}body{max-width:70rem;margin:auto;padding:0 clamp(1rem,4vw,3rem) 3rem}header{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 0;gap:1rem}header b{font-size:1.12rem}a{color:var(--accent)}.hero{position:relative;isolation:isolate;overflow:hidden;background:var(--accent);color:#191827;padding:clamp(1.25rem,4vw,3rem);border-radius:14px;margin:.4rem 0 1.6rem}.hero:after{content:"";position:absolute;z-index:-1;width:38%;height:160%;right:-10%;top:-15%;transform:rotate(27deg);background:repeating-linear-gradient(90deg,transparent 0 1.2rem,#0002 1.2rem 1.4rem)}.hero small{font:700 .8rem ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase}.hero p{max-width:40rem;margin:.75rem 0 0;color:inherit}.hero h1{font:500 clamp(2.6rem,6vw,5rem)/1.05 Georgia,serif;letter-spacing:-.05em;margin:.7rem 0}h2{font:500 1.85rem Georgia,serif;margin:1.4rem 0 .5rem}form,details{padding:1rem clamp(1rem,3vw,2rem);margin:1rem 0;background:var(--panel);border-radius:10px}details form{padding:0}summary{cursor:pointer;font-weight:650;min-height:44px}label{display:grid;gap:.4rem;margin:.7rem 0;min-width:0}input,textarea,select,button{font:inherit;padding:.55rem .75rem;border:1px solid #889398;border-radius:5px;max-width:100%;min-width:0}textarea{width:100%}input,select,button{min-height:44px}button{cursor:pointer;background:var(--accent);color:#191827;font-weight:600;margin:.25rem 0}button:disabled{opacity:.6}p{color:var(--muted)}.results{overflow:auto;max-width:100%;margin:1rem 0}table{width:100%;min-width:42rem;border-collapse:collapse}th,td{text-align:left;padding:.75rem;border-bottom:1px solid #738083;overflow-wrap:anywhere}th{color:var(--accent)}:focus-visible{outline:3px solid var(--accent);outline-offset:3px}#parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr));gap:.7rem}#message:not(:empty){background:var(--panel);padding:.7rem 1rem}#origin{font-weight:700;color:var(--accent)}[hidden]{display:none!important}
+
+/* Console de comparação */
+:root { --panel:#172336; --accent:#a5e6fe; --muted:#becddd; background:#0c1422; color:#eff6fc }
+body { max-width:94rem }
+header b { border-left:.38rem solid #78d4f6; padding-left:.7rem }
+.hero { background:#122d45; color:#f2f9fd; border:1px solid #395772; padding:clamp(1.4rem,5vw,4.5rem); border-radius:1rem }
+.hero:after { display:none }
+.hero h1 { font:750 clamp(2.6rem,6vw,6rem)/1 system-ui,sans-serif; letter-spacing:-.07em }
+.hero small { color:#9cddf7 }
+.hero p { max-width:34rem }
+.hero-link { display:inline-block; margin-top:1.1rem; font-weight:650 }
+.portal-art { position:absolute; inset:0 0 0 64%; z-index:-1; background:repeating-linear-gradient(0deg,transparent 0 27px,#ffffff0a 28px),repeating-linear-gradient(90deg,transparent 0 27px,#ffffff0a 28px); overflow:hidden }
+.portal-art i { position:absolute; inset:12% 15%; border:3px solid #9adff4; border-bottom:0; transform:skewY(-12deg); box-shadow:0 0 0 7px #133753 }
+.portal-art i:nth-child(2){inset:20% 23% 12% 23%}.portal-art i:nth-child(3){inset:28% 31% 20% 31%}.portal-art i:nth-child(4){inset:36% 39% 28% 39%;background:#102133}
+.console { display:grid; grid-template-columns:minmax(16rem,.72fr) minmax(0,1.7fr); gap:1.2rem; align-items:start }
+.console section { min-width:0; background:#111d2d; border:1px solid #34495e; border-radius:.85rem; padding:clamp(1rem,2vw,1.8rem) }
+.console h2 { margin:0 0 1rem; font:670 1.45rem/1.25 system-ui,sans-serif; letter-spacing:-.04em }
+.config details { padding:.8rem; border:1px solid #394b60 }
+summary { align-content:center }
+input,select,textarea { background:#0c1828; color:#f3f7fd; border-color:#62778e }
+textarea { font: .92rem/1.6 ui-monospace,monospace }
+.output select { max-width:18rem }
+th { font-size:.8rem; background:#1c3044 } td { vertical-align:top }
+.verdict { display:inline-block; padding:.22rem .55rem; border-radius:.35rem; font-size:.82rem; background:#283c51; color:#dceafe }
+.verdict[data-status="Regressão"],.verdict[data-status="Falha existente"] { color:#ffc5af; background:#442f31 }
+.verdict[data-status="Passou"],.verdict[data-status="Corrigida"] { color:#abedce; background:#1b3b37 }
+.skip { position:absolute; transform:translateY(-150%); z-index:5; padding:.6rem;background:#0c1422 }.skip:focus { transform:none }
+@media(max-width:840px){ .console{grid-template-columns:1fr} .portal-art{opacity:.3;inset-inline-start:72%} .hero p{max-width:75%} }

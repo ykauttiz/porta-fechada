@@ -5,7 +5,18 @@ function show(rows) {
   body.replaceChildren();
   for (const values of rows) {
     const row = body.insertRow();
-    for (const value of values) row.insertCell().textContent = value;
+    for (const [index, value] of values.entries()) {
+      const cell = row.insertCell();
+      if (index === 3) {
+        const badge = document.createElement("strong");
+        badge.className = "verdict";
+        badge.dataset.status = value;
+        badge.textContent = value;
+        cell.append(badge);
+      } else {
+        cell.textContent = value;
+      }
+    }
   }
 }
 const example = {

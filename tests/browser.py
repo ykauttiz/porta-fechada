@@ -20,6 +20,11 @@ with sync_playwright() as p, TemporaryDirectory() as tmp:
         errors = []
         page.on("pageerror", lambda error: errors.append(str(error)))
         page.goto(f"http://127.0.0.1:{server.server_port}/")
+        page.keyboard.press("Tab")
+        expect(page.locator(".skip")).to_be_focused()
+        page.keyboard.press("Enter")
+        assert page.evaluate("location.hash === document.querySelector('.skip').hash")
+        assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
         expect(page.locator("tbody")).to_contain_text("Regressão")
         page.locator("#import").set_input_files(root / "exemplo.json")
         page.get_by_text("Adicionar regra à comparação",exact=True).click()
