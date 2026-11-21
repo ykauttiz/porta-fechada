@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-11-21
+
+Importação de JSON versionado, criação de regras pelo formulário, filtro por resultado e exportação da configuração e do relatório. Validação das duas configurações completas, incluindo canais sem regras.
+
 ## 2026-11-20 · Origem da decisão
 
 A tabela mostra a última etapa que alterou o acesso efetivo no cenário final. No JSON do terminal, os campos beforeReason e afterReason mostram as etapas para os dois cenários. Uma sobrescrita redundante não altera a explicação.

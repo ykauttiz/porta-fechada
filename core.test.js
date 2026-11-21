@@ -25,3 +25,15 @@ test("identifica a etapa que mudou o acesso",()=>{
   assert.equal(compare(overwritten)[0].afterReason,"Canal · membro");
   assert.throws(()=>compare(null),/regra/);
 });
+test("valida canais sem regra e versão mesmo com acesso elevado",()=>{
+ const doc=structuredClone(fixture);doc.after.channels.outro={overwrites:[{type:"role",id:"ausente",allow:"0",deny:"1"}]};
+ assert.throws(()=>compare(doc),/alvo/);
+ assert.throws(()=>compare({...fixture,schemaVersion:99}),/Versão/);
+});
+test("conflito de cargos agrega as permissões antes da decisão e aceita bits altos",()=>{
+ const doc=structuredClone(fixture);doc.after.roles.equipe=String(1n<<54n);
+ doc.after.channels.tickets.overwrites.push({type:"role",id:"equipe",deny:"1024",allow:"0"});
+ const result=access(doc.after,{...rule,roles:["equipe","visitante"]});assert.equal(result,true);
+ doc.after.channels.tickets.overwrites.push({type:"role",id:"equipe",deny:"0",allow:"0"});
+ assert.throws(()=>compare(doc),/repetida/);
+});

@@ -5,6 +5,7 @@ const {compare} = require("./core");
 function main(args) {
   const paths = args.filter(arg => arg !== "--json");
   if (paths.length !== 1) throw Error("Uso: node check.js arquivo.json [--json]");
+  if (fs.statSync(paths[0]).size > 2 * 1024 * 1024) throw Error("Use um arquivo de até 2 MiB.");
   const source = fs.readFileSync(paths[0], "utf8").replace(/^\uFEFF/, "");
   const results = compare(JSON.parse(source));
   if (args.includes("--json")) console.log(JSON.stringify(results, null, 2));

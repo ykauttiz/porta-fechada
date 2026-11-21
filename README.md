@@ -19,3 +19,11 @@ Execute `node check.js exemplo.json --json`. O relatório vai para a saída padr
 ## Origem da decisão
 
 A tabela mostra a última etapa que alterou o acesso efetivo no cenário final. No JSON do terminal, os campos beforeReason e afterReason mostram as etapas para os dois cenários. Uma sobrescrita redundante não altera a explicação.
+
+## Comparar configurações locais
+
+Carregue o exemplo, importe um JSON ou abra o editor. No formulário de regras, informe o canal, o membro, seus cargos, a operação e o resultado esperado. O painel mostra as etapas decisivas antes e depois da mudança. Filtre regressões para investigar e baixe a configuração para repetir a análise ou o relatório para consultá-lo depois. O relatório inclui todas as regras avaliadas.
+
+O formato reconhece `schemaVersion: 1` e os arquivos antigos sem versão. As máscaras são strings decimais. Sobrescritas repetidas, cargos desconhecidos e bits simultaneamente permitidos e negados são recusados mesmo em canais que não aparecem nas regras. O limite é de 2 MiB por arquivo e 2 mil regras. As regras cobrem visualização e envio em canais comuns de texto. A simulação usa dados fornecidos localmente, sem conexão com o servidor Discord.
+
+[Referência de permissões do Discord](https://docs.discord.com/developers/topics/permissions)

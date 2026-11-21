@@ -1,4 +1,5 @@
 {
+  "schemaVersion": 1,
   "before": {
     "everyone": "3072",
     "roles": {
