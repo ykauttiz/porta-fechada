@@ -20,6 +20,20 @@ with sync_playwright() as p, TemporaryDirectory() as tmp:
         errors = []
         page.on("pageerror", lambda error: errors.append(str(error)))
         page.goto(f"http://127.0.0.1:{server.server_port}/")
+        theme = page.get_by_role("combobox", name="Tema da interface")
+        for mode in ("dark", "light"):
+            theme.select_option(mode)
+            expect(page.locator("html")).to_have_attribute("data-theme", mode)
+            assert page.evaluate("getComputedStyle(document.documentElement).colorScheme") == mode
+            assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
+        page.reload()
+        expect(theme).to_have_value("light")
+        theme.select_option("system")
+        page.emulate_media(color_scheme="dark")
+        expect(page.locator("html")).to_have_attribute("data-theme", "dark")
+        page.emulate_media(color_scheme="light")
+        expect(page.locator("html")).to_have_attribute("data-theme", "light")
+        page.reload()
         page.keyboard.press("Tab")
         expect(page.locator(".skip")).to_be_focused()
         page.keyboard.press("Enter")

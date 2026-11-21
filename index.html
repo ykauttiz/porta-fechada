@@ -1,6 +1,34 @@
 <!doctype html><html lang="pt-BR"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Porta Fechada</title>
-<link rel="stylesheet" href="style.css?v=44d634c8f5d3">
-<body><a class="skip" href="#principal">Ir para a comparação</a><header><b>Porta Fechada</b><a href="https://github.com/ykauttiz/porta-fechada">Código e guia ↗</a></header><main id="principal"><section class="hero"><small>Simulador de permissões</small><h1>Porta Fechada</h1><p>Confira quem pode ler e escrever antes de mudar as permissões de um canal.</p><a class="hero-link" href="#resultado">Ver resultado ↓</a><div class="portal-art" aria-hidden="true"><i></i><i></i><i></i><i></i></div></section>
+<link rel="stylesheet" href="style.css?v=6f2cd10dfd17">
+<body><a class="skip" href="#principal">Ir para a comparação</a><header><b>Porta Fechada</b><a href="https://github.com/ykauttiz/porta-fechada">Código e guia ↗</a><label class="appearance">Tema
+  <select id="appearance" aria-label="Tema da interface">
+    <option value="system">Sistema</option>
+    <option value="light">Claro</option>
+    <option value="dark">Escuro</option>
+  </select>
+</label>
+<script>
+(() => {
+  const select = document.getElementById("appearance");
+  const key = "kaue.appearance";
+  const system = matchMedia("(prefers-color-scheme: dark)");
+  try {
+    const saved = localStorage.getItem(key);
+    if (saved === "dark" || saved === "light") select.value = saved;
+  } catch { /* A escolha também funciona com o armazenamento bloqueado. */ }
+  function apply() {
+    document.documentElement.dataset.theme = select.value === "system"
+      ? (system.matches ? "dark" : "light") : select.value;
+  }
+  select.addEventListener("change", () => {
+    apply();
+    try { localStorage.setItem(key, select.value); } catch { /* Só nesta página. */ }
+  });
+  system.addEventListener("change", apply);
+  apply();
+})();
+</script>
+</header><main id="principal"><section class="hero"><small>Simulador de permissões</small><h1>Porta Fechada</h1><p>Confira quem pode ler e escrever antes de mudar as permissões de um canal.</p><a class="hero-link" href="#resultado">Ver resultado ↓</a><div class="portal-art" aria-hidden="true"><i></i><i></i><i></i><i></i></div></section>
 <nav class="project-nav" aria-label="Áreas do simulador"><a href="#configuracao">Configuração</a><a href="#resultado">Resultados</a><a href="https://ykauttiz.github.io/contratempo/portfolio/">Portfólio ↗</a></nav>
  <div class="console"><section class="config" id="configuracao"><details><summary>Histórico local de comparações</summary><label>Nome da comparação<input id="history-name" maxlength="80"></label><button id="history-save">Guardar comparação</button><label>Comparações guardadas<select id="history-list"></select></label><button id="history-open">Abrir comparação</button><button id="history-remove">Remover da lista</button></details><h2>Configuração</h2>
 <label>Importar comparação JSON<input id="import" type="file" accept=".json,application/json"></label><a href="exemplo.json" download>Baixar exemplo de canal</a> · <a href="exemplo-thread.json" download>Baixar exemplo de thread privada</a><details><summary>Editar configuração JSON</summary><form id="editor"><label>Configurações antes e depois, com regras esperadas<textarea id="source" rows="12" required spellcheck="false"></textarea></label>
