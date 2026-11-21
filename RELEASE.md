@@ -1,5 +1,3 @@
-## Novidades
+Compare leitura e envio em threads públicas e privadas com o exemplo de convite disponível na página. Expanda cada resultado para acompanhar o cálculo. O formato 2 inclui canal pai, convite, bloqueio e arquivamento. Os arquivos anteriores continuam aceitos.
 
-Histórico de comparações nomeadas no navegador, com reabertura, validação e remoção pela interface. O download da configuração permite manter uma cópia fora do navegador.
-
-[Experimentar](https://ykauttiz.github.io/porta-fechada/). [Histórico completo](https://github.com/ykauttiz/porta-fechada/blob/main/CHANGELOG.md).
+A suíte de navegador passou a exercitar os fluxos de uso em 320, 375 e 1280 pixels.
