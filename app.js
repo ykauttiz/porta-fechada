@@ -241,7 +241,7 @@ async function exportEvidence(format) {
     const hash = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",bytes)), b => b.toString(16).padStart(2,"0")).join("");
     if (config !== evaluated) return;
     if (format === "csv") download("evidencias.csv", Reports.csv(config,result,hash), "text/csv;charset=utf-8");
-    else download("relatorio.json",{schemaVersion:1,scope:"canais de texto",configSha256:hash,rules:result});
+    else download("relatorio.json",{schemaVersion:1,scope:config.before.threads || config.after.threads ? "canais de texto e threads" : "canais de texto",configSha256:hash,rules:result});
   } catch (err) { error(err); }
 }
 find("#csv").onclick=()=>exportEvidence("csv");

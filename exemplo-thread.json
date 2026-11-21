@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 2,
+  "before": {
+    "everyone": "274877907968",
+    "roles": {},
+    "channels": {
+      "equipe": {
+        "overwrites": []
+      }
+    },
+    "threads": {
+      "triagem": {
+        "parent": "equipe",
+        "type": "private",
+        "members": [],
+        "locked": false,
+        "archived": false
+      }
+    }
+  },
+  "after": {
+    "everyone": "274877907968",
+    "roles": {},
+    "channels": {
+      "equipe": {
+        "overwrites": []
+      }
+    },
+    "threads": {
+      "triagem": {
+        "parent": "equipe",
+        "type": "private",
+        "members": [
+          "participante"
+        ],
+        "locked": false,
+        "archived": false
+      }
+    }
+  },
+  "rules": [
+    {
+      "name": "Participante convidado pode responder",
+      "channel": "triagem",
+      "member": "participante",
+      "roles": [],
+      "permission": "send",
+      "expect": true
+    }
+  ]
+}

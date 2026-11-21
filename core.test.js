@@ -37,3 +37,40 @@ test("conflito de cargos agrega as permissões antes da decisão e aceita bits a
  doc.after.channels.tickets.overwrites.push({type:"role",id:"equipe",deny:"0",allow:"0"});
  assert.throws(()=>compare(doc),/repetida/);
 });
+
+const threadFixture = require("./exemplo-thread.json");
+test("convite libera envio quando o canal pai permite falar na thread", () => {
+  const [row] = compare(threadFixture);
+  assert.equal(row.status,"Corrigida");
+  assert.match(row.beforeReason,/convite/);
+});
+test("thread pública herda visibilidade, mas tem permissão própria de envio", () => {
+  const snapshot = structuredClone(threadFixture.before);
+  const rule = threadFixture.rules[0];
+  snapshot.threads.triagem.type = "public";
+  snapshot.everyone = "3072";
+  assert.equal(access(snapshot,rule),false);
+  assert.equal(access(snapshot,{...rule,permission:"view"}),true);
+  snapshot.everyone = String(1n << 38n);
+  assert.equal(access(snapshot,rule),false);
+});
+test("bloqueio, arquivamento e moderação alteram o envio imediato", () => {
+  const snapshot = structuredClone(threadFixture.after), rule = threadFixture.rules[0];
+  const thread = snapshot.threads.triagem;
+  thread.archived = true;
+  assert.equal(access(snapshot,rule),true);
+  thread.locked = true;
+  assert.equal(access(snapshot,rule),false);
+  snapshot.everyone = String(BigInt(snapshot.everyone) | (1n << 34n));
+  thread.members = [];
+  assert.equal(access(snapshot,{...rule,permission:"view"}),true);
+  assert.equal(access(snapshot,rule),false);
+  thread.archived = false;
+  assert.equal(access(snapshot,rule),true);
+});
+test("thread exige versão compatível, canal pai e membros válidos", () => {
+  const doc = structuredClone(threadFixture);
+  assert.throws(()=>compare({...doc,schemaVersion:1}),/versão|schemaVersion/);
+  doc.before.threads.triagem.parent = "ausente";
+  assert.throws(()=>compare(doc),/Thread inválida/);
+});

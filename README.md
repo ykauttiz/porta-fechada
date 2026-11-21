@@ -6,7 +6,13 @@ Um visitante deve ficar fora do canal de tickets. Uma mudança de cargo passou a
 
 Baixe a pasta para usar offline. O editor aceita o formato de **exemplo.json**. Os objetos `before` e `after` descrevem o cargo geral, os cargos adicionais e as sobrescritas de cada canal. Cada regra identifica membro, cargos, canal, permissão e resultado esperado. Máscaras são strings decimais. O verificador lê exclusivamente o documento fornecido.
 
-O cálculo combina permissões do servidor, aplica a sobrescrita geral, agrega as dos cargos e aplica a do membro por último. Dono e administrador têm acesso. Enviar mensagens requer visibilidade do canal. O escopo desta edição é leitura e envio em canais comuns de texto. Use as sobrescritas efetivas do canal. Threads, timeout, canais de voz e hierarquia de moderação ficam fora do modelo.
+O cálculo combina permissões do servidor, aplica a sobrescrita geral, agrega as dos cargos e aplica a do membro por último. Dono e administrador têm acesso. Enviar mensagens requer visibilidade do canal. O simulador cobre canais de texto e threads públicas e privadas. Use as sobrescritas efetivas do canal pai. Timeout, canais de voz e hierarquia de moderação ficam fora do modelo.
+
+### Testar uma thread privada
+
+Baixe [o exemplo de convite](exemplo-thread.json) e abra o arquivo em **Importar comparação JSON**, ou execute `node check.js exemplo-thread.json`. Antes do convite, o participante não consegue responder. Depois, a regra aparece como **Corrigida**. Para testar a mesma pessoa em outro canal, altere o destino da regra.
+
+No formato 2, cada entrada em `threads` declara o canal pai, o tipo, os membros convidados e os estados `locked` e `archived`. A regra de envio considera o envio imediato. Uma thread arquivada desbloqueada pode reabrir ao enviar. Para uma bloqueada e arquivada, simule a reabertura explícita antes de testar o envio. O simulador usa somente o cenário informado. [Referência do Discord](https://docs.discord.com/developers/topics/threads)
 
 Node 20+ · `node --test`. Os testes cobrem o exemplo, precedência do membro, administrador e configurações inválidas.
 
@@ -24,7 +30,7 @@ A tabela mostra a última etapa que alterou o acesso efetivo no cenário final. 
 
 Carregue o exemplo, importe um JSON ou abra o editor. No formulário de regras, informe o canal, o membro, seus cargos, a operação e o resultado esperado. O painel mostra as etapas decisivas antes e depois da mudança. Filtre regressões para investigar e baixe a configuração para repetir a análise ou o relatório para consultá-lo depois. O relatório inclui todas as regras avaliadas.
 
-O formato reconhece `schemaVersion: 1` e os arquivos antigos sem versão. As máscaras são strings decimais. Sobrescritas repetidas, cargos desconhecidos e bits simultaneamente permitidos e negados são recusados mesmo em canais que não aparecem nas regras. O limite é de 2 MiB por arquivo e 2 mil regras. As regras cobrem visualização e envio em canais comuns de texto. A simulação usa dados fornecidos localmente, sem conexão com o servidor Discord.
+O formato reconhece as versões 1 e 2 e os arquivos antigos sem versão. As máscaras são strings decimais. Sobrescritas repetidas, cargos desconhecidos e bits simultaneamente permitidos e negados são recusados mesmo em canais que não aparecem nas regras. O limite é de 2 MiB por arquivo e 2 mil regras. A simulação usa dados fornecidos localmente, sem conexão com o servidor Discord.
 
 [Referência de permissões do Discord](https://docs.discord.com/developers/topics/permissions)
 

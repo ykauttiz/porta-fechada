@@ -15,7 +15,7 @@ Thread(target=server.serve_forever, daemon=True).start()
 with sync_playwright() as p, TemporaryDirectory() as tmp:
     backend = os.environ.get("ENGINE", "chromium")
     browser = getattr(p, backend).launch(executable_path=shutil.which("google-chrome") if backend == "chromium" else None)
-    for width in (375, 1280):
+    for width in (320, 375, 1280):
         page = browser.new_page(viewport={"width": width, "height": 850}, accept_downloads=True)
         errors = []
         page.on("pageerror", lambda error: errors.append(str(error)))
@@ -89,6 +89,11 @@ with sync_playwright() as p, TemporaryDirectory() as tmp:
         expect(page.locator("#rule-pages")).to_be_hidden()
         page.get_by_role("button",name="Passou · 0").click()
         expect(page.locator("#rule-table tbody tr")).to_have_count(0)
+        page.locator("#rule-search").fill("")
+        page.locator("#filter").select_option("")
+        page.locator("#import").set_input_files(root / "exemplo-thread.json")
+        expect(page.locator("#rule-table tbody")).to_contain_text("Corrigida")
+        expect(page.locator("#rule-table tbody")).to_contain_text("convite")
         assert not errors, errors
         page.close()
     browser.close()
