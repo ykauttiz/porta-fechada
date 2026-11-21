@@ -2,6 +2,8 @@
 
 [Experimentar no navegador](https://ykauttiz.github.io/porta-fechada/)
 
+![Comparação local de permissões de leitura e envio no exemplo de tickets.](assets/demonstracao.webp)
+
 Um visitante deve ficar fora do canal de tickets. Uma mudança de cargo passou a permitir a leitura. Abra **index.html** para ver a regra quebrar e a coluna que mudou de “Negado” para “Permitido”.
 
 Baixe a pasta para usar offline. O editor aceita o formato de **exemplo.json**. Os objetos `before` e `after` descrevem o cargo geral, os cargos adicionais e as sobrescritas de cada canal. Cada regra identifica membro, cargos, canal, permissão e resultado esperado. Máscaras são strings decimais. O verificador lê exclusivamente o documento fornecido.
