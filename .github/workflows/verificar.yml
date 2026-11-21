@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-      - run: node --test
+      - run: node --test --experimental-test-coverage
   interface:
     runs-on: ubuntu-24.04
     strategy:
@@ -30,3 +30,9 @@ jobs:
       - run: python tests/browser.py
         env:
           ENGINE: ${{ matrix.engine }}
+          CAPTURAR_DEMO: "1"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: capturas-${{ matrix.engine }}
+          path: capturas/*.png
+          if-no-files-found: error

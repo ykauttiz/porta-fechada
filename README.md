@@ -33,3 +33,7 @@ O relatório CSV contém todas as regras avaliadas, os cargos, a expectativa, as
 Busque regras por nome, canal, membro ou cargo e combine a busca com o filtro de resultado. Os downloads continuam representando a comparação completa. Uma importação inválida identifica qual configuração continua em uso.
 
 O painel de resultados conta os quatro tipos de decisão dentro da busca atual. Selecione um contador para filtrar e selecione-o novamente para remover o filtro. A tabela apresenta 50 regras por página, e CSV e JSON incluem a análise completa.
+
+O CI executa os testes do motor e da CLI com cobertura no Node 22 e 24. Abra a etapa de testes para consultar as linhas e ramos cobertos.
+
+[Ver testes e capturas de celular e computador](https://github.com/ykauttiz/porta-fechada/actions/workflows/verificar.yml). Na execução, abra o artefato **capturas-chromium** ou **capturas-firefox**. As imagens usam dados fictícios.

@@ -26,6 +26,11 @@ with sync_playwright() as p, TemporaryDirectory() as tmp:
         assert page.evaluate("location.hash === document.querySelector('.skip').hash")
         assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
         expect(page.locator("tbody")).to_contain_text("Regressão")
+        if os.environ.get("CAPTURAR_DEMO") == "1":
+            captures = root / "capturas"
+            captures.mkdir(exist_ok=True)
+            page.screenshot(path=captures / f"demo-{width}.png", animations="disabled")
+
         page.locator("#import").set_input_files(root / "exemplo.json")
         page.get_by_text("Adicionar regra à comparação",exact=True).click()
         page.locator("#ruleName").fill("Equipe de apoio")
