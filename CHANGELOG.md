@@ -2,6 +2,8 @@
 
 ## 2026-11-21
 
+A matriz por membro mostra leitura e envio antes e depois, separados por canal e conjunto de cargos declarado. Uma operação sem regra aparece explicitamente como tal.
+
 O CI executa os testes do motor e da CLI com cobertura no Node 22 e 24. Abra a etapa de testes para consultar as linhas e ramos cobertos. O CI disponibiliza capturas em duas larguras.
 
 O painel de resultados conta os quatro tipos de decisão dentro da busca atual. Selecione um contador para filtrar e selecione-o novamente para remover o filtro. A tabela apresenta 50 regras por página, e CSV e JSON incluem a análise completa.

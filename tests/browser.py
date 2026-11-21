@@ -31,6 +31,10 @@ with sync_playwright() as p, TemporaryDirectory() as tmp:
             captures.mkdir(exist_ok=True)
             page.screenshot(path=captures / f"demo-{width}.png", animations="disabled")
 
+        page.get_by_text("Matriz por membro e canal",exact=True).click()
+        expect(page.locator("#matrix-rows")).to_contain_text("Negado → Permitido")
+        expect(page.locator("#matrix-rows")).to_contain_text("Sem regra")
+        page.get_by_text("Matriz por membro e canal",exact=True).click()
         page.locator("#import").set_input_files(root / "exemplo.json")
         page.get_by_text("Adicionar regra à comparação",exact=True).click()
         page.locator("#ruleName").fill("Equipe de apoio")

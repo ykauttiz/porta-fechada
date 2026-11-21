@@ -37,3 +37,5 @@ O painel de resultados conta os quatro tipos de decisão dentro da busca atual. 
 O CI executa os testes do motor e da CLI com cobertura no Node 22 e 24. Abra a etapa de testes para consultar as linhas e ramos cobertos.
 
 [Ver testes e capturas de celular e computador](https://github.com/ykauttiz/porta-fechada/actions/workflows/verificar.yml). Na execução, abra o artefato **capturas-chromium** ou **capturas-firefox**. As imagens usam dados fictícios.
+
+A matriz por membro mostra leitura e envio antes e depois, separados por canal e conjunto de cargos declarado. Uma operação sem regra aparece explicitamente como tal.

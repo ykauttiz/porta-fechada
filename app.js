@@ -117,10 +117,37 @@ function draw() {
 }
 find("#rule-back").onclick = () => {page--;draw();};
 find("#rule-next").onclick = () => {page++;draw();};
+function drawMatrix() {
+  const body = find("#matrix-rows");
+  body.replaceChildren();
+  if (!evaluated || !find("#matrix-panel").open) return;
+  const member = find("#matrix-member").value, byChannel = new Map();
+  evaluated.rules.forEach((rule,index) => {
+    if (rule.member !== member) return;
+    const roles = [...rule.roles].sort(), key = JSON.stringify([rule.channel,roles]);
+    if (!byChannel.has(key)) byChannel.set(key,{channel:rule.channel,roles});
+    byChannel.get(key)[rule.permission] = rows[index];
+  });
+  const transition = result => result ? [result.before,result.after].map(v => v ? "Permitido" : "Negado").join(" → ") : "Sem regra";
+  const fragment = document.createDocumentFragment();
+  for (const item of byChannel.values()) {
+    const tr = document.createElement("tr");
+    for (const value of [item.channel,item.roles.join(", ") || "Sem cargos",transition(item.view),transition(item.send)]) tr.insertCell().textContent = value;
+    fragment.append(tr);
+  }
+  body.append(fragment);
+}
+find("#matrix-panel").ontoggle = drawMatrix;
+find("#matrix-member").onchange = drawMatrix;
 function apply(data, rewrite) {
   const result = compare(data);
   if (rewrite) source.value = JSON.stringify(data,null,2);
   evaluated = data; rows = result; page = 0;
+  const memberSelect = find("#matrix-member"), oldMember = memberSelect.value;
+  const members = [...new Set(data.rules.map(rule => rule.member))].sort();
+  memberSelect.replaceChildren(...members.map(member => new Option(member,member)));
+  if (members.includes(oldMember)) memberSelect.value = oldMember;
+  drawMatrix();
   searchIndex = data.rules.map((rule,index) => [result[index].rule,rule.channel,rule.member,...rule.roles].map(normalize));
   find("#csv").disabled = find("#download").disabled = find("#save").disabled = false;
   draw();
@@ -131,7 +158,7 @@ function parse(text) {
 }
 function error(e) {find("#message").textContent=e.message;}
 source.oninput=()=>{
-  generation++;evaluated=null;rows=[];searchIndex=[];page=0;draw();find("#csv").disabled=find("#download").disabled=find("#save").disabled=true;
+  generation++;evaluated=null;find("#matrix-member").replaceChildren();drawMatrix();rows=[];searchIndex=[];page=0;draw();find("#csv").disabled=find("#download").disabled=find("#save").disabled=true;
   find("#message").textContent="Configuração editada. Execute as regras para atualizar o relatório.";
 };
 find("#editor").onsubmit=e=>{e.preventDefault();generation++;try{apply(parse(source.value),false);}catch(err){error(err);}};
