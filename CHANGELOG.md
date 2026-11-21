@@ -2,6 +2,8 @@
 
 ## 2026-11-21
 
+Navegação visual revista, foco de teclado explícito, link para o portfólio e roteiro curto no README.
+
 O CSV de evidências neutraliza também prefixos de controle e variantes Unicode que podem iniciar fórmulas em planilhas.
 
 Simulação local de threads públicas e privadas no formato 2, com exemplo de convite e decisões explicadas. Os testes de interface também exercitam telas de 320 pixels.

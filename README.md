@@ -1,6 +1,8 @@
 # Porta Fechada
 
-[Experimentar no navegador](https://ykauttiz.github.io/porta-fechada/)
+**Experimente em um minuto.** Na demo, expanda a etapa decisiva no exemplo de tickets. Abra as etapas de antes e depois para conferir qual regra liberou o acesso. Há também um exemplo de thread privada para importar.
+
+[Abrir demonstração](https://ykauttiz.github.io/porta-fechada/) · [Portfólio do Kauê](https://ykauttiz.github.io/contratempo/portfolio/)
 
 ![Comparação local de permissões de leitura e envio no exemplo de tickets.](assets/demonstracao.webp)
 

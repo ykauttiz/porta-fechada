@@ -38,3 +38,24 @@ th { font-size:.8rem; background:#1c3044 } td { vertical-align:top }
   .verdict {animation: reveal-state 220ms ease-out both}
   @keyframes reveal-state {from{opacity:.7;transform:translateY(3px)}to{opacity:1;transform:none}}
 }
+
+
+:root { --focus-ring:#a9e4ff }
+.hero { background: radial-gradient(ellipse at 83% 100%,#204f68,transparent 65%), #142a41 }
+.hero-link { padding:.55rem .85rem; border:1px solid #74abc3; border-radius:.375rem }
+#rule-table { min-width:38rem }
+#rule-table :is(th,td):nth-child(2),
+#rule-table :is(th,td):nth-child(3),
+#rule-table :is(th,td):nth-child(4) { white-space:nowrap }
+.results { scrollbar-color:#6ca1bf #16283a }
+
+.project-nav { display:flex; align-items:center; flex-wrap:wrap; gap:.35rem 1rem; padding:.25rem 0; margin:0 0 .75rem; border-block:1px solid currentColor }
+.project-nav a { display:inline-flex; align-items:center; min-height:44px; text-underline-offset:.24em }
+
+:is(a,button,summary,input,select,textarea):focus-visible { outline:3px solid var(--focus-ring); outline-offset:3px }
+section[id], h2[id] { scroll-margin-top:1rem }
+@media (prefers-reduced-motion:no-preference) {
+  html { scroll-behavior:smooth }
+  details[open] > summary ~ p { animation:details-open .2s ease-out both }
+  @keyframes details-open { from { opacity:.7; transform:translateY(3px) } to { opacity:1; transform:none } }
+}
