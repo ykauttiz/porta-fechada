@@ -2,6 +2,8 @@
 
 ## 2026-11-21
 
+O CSV de evidências neutraliza também prefixos de controle e variantes Unicode que podem iniciar fórmulas em planilhas.
+
 Simulação local de threads públicas e privadas no formato 2, com exemplo de convite e decisões explicadas. Os testes de interface também exercitam telas de 320 pixels.
 
 Na tabela de resultados, expanda cada etapa decisiva para acompanhar a permissão desde a configuração do servidor até a última sobrescrita aplicável. O relatório JSON inclui esse percurso.

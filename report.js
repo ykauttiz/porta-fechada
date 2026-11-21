@@ -3,7 +3,7 @@
 const Reports = (() => {
   function csvCell(value) {
     let text = String(value);
-    if (/^\s*[=+@-]/.test(text)) text = "'" + text;
+    if (/^[\t\r\n\0]|^\s*[=+@\uFF1D\uFF0B\uFF0D\uFF20-]/u.test(text)) text = "'" + text;
     return '"' + text.replaceAll('"', '""') + '"';
   }
   function csv(config, results, hash) {
@@ -16,6 +16,6 @@ const Reports = (() => {
     });
     return "\uFEFF" + [header,...records].map(r => r.map(csvCell).join(";")).join("\r\n");
   }
-  return {csv};
+  return {csv,csvCell};
 })();
 if (typeof module !== "undefined") module.exports = Reports;
