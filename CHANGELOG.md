@@ -1,5 +1,9 @@
 # Changelog
 
+## 22 de novembro de 2026 · Link de salto legível no tema claro
+
+- O link "Ir para a comparação", primeiro destino do Tab, tinha contraste de 2,4:1 no tema claro. Agora usa as cores do tema. O teste de navegador mede o contraste do texto visível nos dois temas e falha abaixo de 4,5:1 (3:1 para texto grande).
+
 ## 21 de novembro de 2026 · Aparência configurável
 
 - Seletor de tema automático, claro e escuro com preferência local e testes de recarga em navegador.
