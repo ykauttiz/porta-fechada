@@ -58,6 +58,12 @@ A matriz por membro mostra leitura e envio antes e depois, separados por canal e
 
 Histórico de comparações nomeadas no navegador, com reabertura, validação e remoção pela interface. O download da configuração permite manter uma cópia fora do navegador.
 
+## Privacidade, segurança e contribuição
+
+A análise roda no navegador ou no terminal sobre o JSON que você fornece, sem conexão com o servidor do Discord. O histórico de comparações fica no armazenamento local do navegador. Um snapshot real pode conter IDs de cargos, canais e membros: anonimize-o antes de compartilhar.
+
+Para relatar uma falha, veja [SECURITY.md](SECURITY.md). Para propor mudanças, veja [CONTRIBUTING.md](CONTRIBUTING.md). Use somente dados fictícios ou anonimizados em issues e pull requests.
+
 ## Publicar uma versão
 
 Atualize `RELEASE.md` com as mudanças verificadas. Para marcar uma entrega, use na branch principal um commit com o título `release(vAAAA.MM.DD) Título da atualização`. Para uma segunda edição no mesmo dia, acrescente um número à versão, como `vAAAA.MM.DD.1`. O GitHub Actions publica a release após a aprovação dos testes. Commits comuns continuam atualizando o site.
