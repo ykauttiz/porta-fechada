@@ -1,5 +1,10 @@
 # Changelog
 
+## 23 de novembro de 2026 · Segurança de exportação e integridade
+
+- Exportações CSV de evidências de permissões neutralizam fórmulas precedidas por caracteres Unicode invisíveis, sem transformar números negativos legítimos em texto.
+- Novos testes de regressão protegem os cenários de importação e exportação.
+
 ## 22 de novembro de 2026 · Link de salto legível no tema claro
 
 - O link "Ir para a comparação", primeiro destino do Tab, tinha contraste de 2,4:1 no tema claro. Agora usa as cores do tema. O teste de navegador mede o contraste do texto visível nos dois temas e falha abaixo de 4,5:1 (3:1 para texto grande).
