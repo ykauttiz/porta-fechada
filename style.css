@@ -87,5 +87,6 @@ section[id], h2[id] { scroll-margin-top:1rem }
   :root[data-theme="light"] :is(button[aria-pressed=true]) { background: var(--accent); color: var(--surface) }
   :root[data-theme="light"] :focus-visible { outline-color: var(--accent) }
   :root[data-theme="light"] :is(.hero) { color: #fff9ec }
+  :root[data-theme="light"] .skip:focus { background: var(--ink); color: var(--surface) }
 
 }
